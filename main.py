@@ -5,6 +5,7 @@ from urllib.parse import urlsplit
 
 import requests
 from dotenv import load_dotenv
+import telegram
 
 
 def file_extension(url):
@@ -70,6 +71,10 @@ def main():
     load_dotenv()
     path = 'images'
     nasa_api = os.environ['NASA_API_KEY']
+    bot_token = os.environ['TELEGRAM_BOT_TOKEN']
+    bot = telegram.Bot(token=bot_token)
+    bot.send_message(text="Hello here! Don't worry, it's just a test",
+                     chat_id=1075263052)
     try:
         os.makedirs(path)
         fetch_spacex_last_launch(path)
