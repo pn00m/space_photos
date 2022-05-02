@@ -4,8 +4,8 @@ from os.path import splitext
 from urllib.parse import urlsplit
 
 import requests
-from dotenv import load_dotenv
 import telegram
+from dotenv import load_dotenv
 
 
 def file_extension(url):
@@ -73,8 +73,6 @@ def main():
     nasa_api = os.environ['NASA_API_KEY']
     bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     bot = telegram.Bot(token=bot_token)
-    bot.send_message(text="Hello here! Don't worry, it's just a test",
-                     chat_id=1075263052)
     try:
         os.makedirs(path)
         fetch_spacex_last_launch(path)
@@ -82,7 +80,10 @@ def main():
         fetch_nasa_epic(path, nasa_api)
     except FileExistsError:
         print('Папка уже существует')
-
+    bot.send_document(
+                      chat_id=1075263052,
+                      document=open('images/spacex1.jpg', 'rb')
+    )
 
 if __name__ == '__main__':
     main()
