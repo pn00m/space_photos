@@ -1,11 +1,12 @@
-import datetime
 import os
+import datetime
 from os.path import splitext
 from urllib.parse import urlsplit
 
 import requests
 import telegram
 from dotenv import load_dotenv
+import time
 
 
 def file_extension(url):
@@ -15,10 +16,12 @@ def file_extension(url):
 
 
 def get_pictures(url, path, filename):
-    response = requests.get(url)
-    response.raise_for_status()
-    with open(filename, 'wb') as file:
-        file.write(response.content)
+    try:
+        response = requests.get(url)
+        with open(filename, 'wb') as file:
+            file.write(response.content)
+    except requests.exceptions.ConnectionError:
+        return
 
 
 def fetch_nasa_epic(path, nasa_api):
@@ -41,10 +44,7 @@ def fetch_nasa_epic(path, nasa_api):
 
 def fetch_nasa_apod(path, nasa_api):
     input_link = 'https://api.nasa.gov/planetary/apod'
-    payload = {
-        "api_key": f"{nasa_api}",
-        "count": 30
-    }
+    payload = {"api_key": f"{nasa_api}", "count": 30}
     response = requests.get(input_link, params=payload)
     reply = response.json()
     for image_number, picture in enumerate(reply):
@@ -54,7 +54,7 @@ def fetch_nasa_apod(path, nasa_api):
                 format(path, image_number+1, file_extension(nasa_image_url))
             get_pictures(nasa_image_url, path, nasa_filename)
         except KeyError:
-            None
+            continue
 
 
 def fetch_spacex_last_launch(path):
@@ -72,18 +72,31 @@ def main():
     path = 'images'
     nasa_api = os.environ['NASA_API_KEY']
     bot_token = os.environ['TELEGRAM_BOT_TOKEN']
+    channel_id = os.environ['TELEGRAM_CHANNEL_ID']
     bot = telegram.Bot(token=bot_token)
+    while_condition = True
+    try:
+        cycle_delay = os.environ['DELAY']
+    except KeyError:
+        cycle_delay = 1
     try:
         os.makedirs(path)
+    except FileExistsError:
+        print('Папка ' + path + ' уже существует. Удалите её')
+        while_condition = False
+    while while_condition:
         fetch_spacex_last_launch(path)
         fetch_nasa_apod(path, nasa_api)
         fetch_nasa_epic(path, nasa_api)
-    except FileExistsError:
-        print('Папка уже существует')
-    bot.send_document(
-                      chat_id=1075263052,
-                      document=open('images/spacex1.jpg', 'rb')
-    )
+        for filenames in os.walk(path):
+            for filename in filenames[2]:
+                time.sleep(int(cycle_delay))
+                bot.send_document(
+                                chat_id=channel_id,
+                                document=open(path+'/'+filename, 'rb')
+                                )
+                os.remove(path+'/'+filename)
+
 
 if __name__ == '__main__':
     main()
