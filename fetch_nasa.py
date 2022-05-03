@@ -3,10 +3,9 @@ import datetime
 from os.path import splitext
 from urllib.parse import urlsplit
 
+
 import requests
-import telegram
 from dotenv import load_dotenv
-import time
 
 
 def file_extension(url):
@@ -57,45 +56,16 @@ def fetch_nasa_apod(path, nasa_api):
             continue
 
 
-def fetch_spacex_last_launch(path):
-    spacex_api_link = 'https://api.spacexdata.com/v3/rockets'
-    payload = {'rocket_id': 'falcon_heavy', 'limit': 1, 'offset': 2}
-    response = requests.get(spacex_api_link, params=payload)
-    spacex_images = response.json()[0]['flickr_images']
-    for image_number, spacex_image_url in enumerate(spacex_images):
-        spacex_filename = '{}/spacex{}.jpg'.format(path, image_number + 1)
-        get_pictures(spacex_image_url, path, spacex_filename)
-
-
 def main():
     load_dotenv()
     path = 'images'
     nasa_api = os.environ['NASA_API_KEY']
-    bot_token = os.environ['TELEGRAM_BOT_TOKEN']
-    channel_id = os.environ['TELEGRAM_CHANNEL_ID']
-    bot = telegram.Bot(token=bot_token)
-    while_condition = True
-    try:
-        cycle_delay = os.environ['DELAY']
-    except KeyError:
-        cycle_delay = 1
     try:
         os.makedirs(path)
     except FileExistsError:
-        print('Папка ' + path + ' уже существует. Удалите её')
-        while_condition = False
-    while while_condition:
-        fetch_spacex_last_launch(path)
-        fetch_nasa_apod(path, nasa_api)
-        fetch_nasa_epic(path, nasa_api)
-        for filenames in os.walk(path):
-            for filename in filenames[2]:
-                time.sleep(int(cycle_delay))
-                bot.send_document(
-                                chat_id=channel_id,
-                                document=open(path+'/'+filename, 'rb')
-                                )
-                os.remove(path+'/'+filename)
+        pass
+    fetch_nasa_apod(path, nasa_api)
+    fetch_nasa_epic(path, nasa_api)
 
 
 if __name__ == '__main__':
