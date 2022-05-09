@@ -35,7 +35,8 @@ def fetch_nasa_epic(path, nasa_api):
     payload = {
         "api_key": {nasa_api},
     }
-    for day in range(5):
+    epic_photos_amount = 5
+    for day in range(epic_photos_amount):
         input_link = 'https://api.nasa.gov/EPIC/api/natural/date/{}'\
           .format(datetime.date.today()-datetime.timedelta(days=day+25))
         response = check_url_accessibility(input_link, payload)
@@ -52,7 +53,8 @@ def fetch_nasa_epic(path, nasa_api):
 
 def fetch_nasa_apod(path, nasa_api):
     input_link = 'https://api.nasa.gov/planetary/apod'
-    payload = {"api_key": {nasa_api}, "count": 30}
+    apod_photos_amount = 30
+    payload = {"api_key": {nasa_api}, "count": apod_photos_amount}
     response = check_url_accessibility(input_link, payload)
     if response:
         reply = response.json()
