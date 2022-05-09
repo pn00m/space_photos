@@ -47,7 +47,7 @@ def fetch_nasa_epic(path, nasa_api):
                 .format(epic_date.year, epic_date.strftime('%m'),
                         epic_date.strftime('%d'), reply[0]['image'], nasa_api)
             nasa_filename = '{}/nasa_epic{}.png'.format(path, day + 1)
-            download_pictures(epic_url, path, nasa_filename)
+            download_pictures(epic_url, nasa_filename)
 
 
 def fetch_nasa_apod(path, nasa_api):
@@ -64,7 +64,7 @@ def fetch_nasa_apod(path, nasa_api):
                                     path, image_number+1,
                                     file_extension(nasa_image_url)
                                     )
-                download_pictures(nasa_image_url, path, nasa_filename)
+                download_pictures(nasa_image_url, nasa_filename)
             except KeyError:
                 continue
 

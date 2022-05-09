@@ -14,7 +14,7 @@ def main():
     os.makedirs(path, exist_ok=True)
     for image_number, spacex_image_url in enumerate(spacex_images):
         spacex_filename = '{}/spacex{}.jpg'.format(path, image_number + 1)
-        download_pictures(spacex_image_url, path, spacex_filename)
+        download_pictures(spacex_image_url, spacex_filename)
 
 
 if __name__ == '__main__':

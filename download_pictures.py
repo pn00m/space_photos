@@ -1,6 +1,6 @@
 import requests
 
-def download_pictures(url, path, filename):
+def download_pictures(url, filename):
     try:
         response = requests.get(url)
         with open(filename, 'wb') as file:
