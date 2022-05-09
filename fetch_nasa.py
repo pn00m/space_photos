@@ -27,7 +27,7 @@ def check_url_accessibility(url, payload):
             requests.exceptions.InvalidURL,
             requests.exceptions.ConnectionError,
     ):
-            return None
+        return None
     return response
 
 
@@ -36,18 +36,13 @@ def fetch_nasa_epic(path, nasa_api):
         "api_key": {nasa_api},
     }
     epic_photos_amount = 5
-    for day in range(epic_photos_amount):
-        input_link = 'https://api.nasa.gov/EPIC/api/natural/date/{}'\
-                    .format(
-                        datetime.date.today()-datetime.timedelta(
-                            days=day+25
-                            )
-                    )
-        response = check_url_accessibility(input_link, payload)
-        if response:
-            reply = response.json()
-            epic_date = datetime.datetime.fromisoformat(reply[0]['date'])
-            epic_base_url = 'https://api.nasa.gov/EPIC/archive/natural/'
+    input_link = 'https://api.nasa.gov/EPIC/api/natural'
+    epic_base_url = 'https://api.nasa.gov/EPIC/archive/natural/'
+    response = check_url_accessibility(input_link, payload)
+    if response:
+        reply = response.json()
+        for day in range(epic_photos_amount):
+            epic_date = datetime.datetime.fromisoformat(reply[day]['date'])
             epic_url = epic_base_url + '{}/{}/{}/png/{}.png?api_key={}'\
                 .format(epic_date.year, epic_date.strftime('%m'),
                         epic_date.strftime('%d'), reply[0]['image'], nasa_api
@@ -60,8 +55,8 @@ def fetch_nasa_apod(path, nasa_api):
     input_link = 'https://api.nasa.gov/planetary/apod'
     apod_photos_amount = 30
     payload = {
-            "api_key": {nasa_api},
-            "count": apod_photos_amount
+        "api_key": {nasa_api},
+        "count": apod_photos_amount
     }
     response = check_url_accessibility(input_link, payload)
     if response:
@@ -70,7 +65,7 @@ def fetch_nasa_apod(path, nasa_api):
             try:
                 nasa_image_url = reply[image_number]['hdurl']
                 nasa_filename_extension = file_extension(nasa_image_url)
-                nasa_filename = path + '/nasa_apod' + str(image_number+1) +\
+                nasa_filename = path + '/nasa_apod' + str(image_number + 1) +\
                     nasa_filename_extension
                 download_pictures(nasa_image_url, nasa_filename)
             except KeyError:
