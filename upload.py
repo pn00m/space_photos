@@ -11,7 +11,6 @@ def main():
     bot_token = os.environ['TELEGRAM_BOT_TOKEN']
     channel_id = os.environ['TELEGRAM_CHANNEL_ID']
     bot = telegram.Bot(token=bot_token)
-    while_condition = True
     try:
         cycle_delay = os.environ['DELAY']
     except KeyError:
