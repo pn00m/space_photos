@@ -21,12 +21,12 @@ def check_url_accessibility(url, payload):
         response = requests.get(url, params=payload)
         if (response.status_code in (400, 401, 404)) or\
                 ('error' in response):
-                return None
+            return None
     except (
             requests.exceptions.HTTPError,
             requests.exceptions.InvalidURL,
             requests.exceptions.ConnectionError,
-            ):
+    ):
             return None
     return response
 
@@ -38,15 +38,20 @@ def fetch_nasa_epic(path, nasa_api):
     epic_photos_amount = 5
     for day in range(epic_photos_amount):
         input_link = 'https://api.nasa.gov/EPIC/api/natural/date/{}'\
-          .format(datetime.date.today()-datetime.timedelta(days=day+25))
+                    .format(
+                        datetime.date.today()-datetime.timedelta(
+                            days=day+25
+                            )
+                    )
         response = check_url_accessibility(input_link, payload)
         if response:
             reply = response.json()
             epic_date = datetime.datetime.fromisoformat(reply[0]['date'])
-            epic_url = 'https://api.nasa.gov/EPIC/archive/natural/' + \
-                '{}/{}/{}/png/{}.png?api_key={}'\
+            epic_base_url = 'https://api.nasa.gov/EPIC/archive/natural/'
+            epic_url = epic_base_url + '{}/{}/{}/png/{}.png?api_key={}'\
                 .format(epic_date.year, epic_date.strftime('%m'),
-                        epic_date.strftime('%d'), reply[0]['image'], nasa_api)
+                        epic_date.strftime('%d'), reply[0]['image'], nasa_api
+                        )
             nasa_filename = '{}/nasa_epic{}.png'.format(path, day + 1)
             download_pictures(epic_url, nasa_filename)
 
@@ -54,18 +59,19 @@ def fetch_nasa_epic(path, nasa_api):
 def fetch_nasa_apod(path, nasa_api):
     input_link = 'https://api.nasa.gov/planetary/apod'
     apod_photos_amount = 30
-    payload = {"api_key": {nasa_api}, "count": apod_photos_amount}
+    payload = {
+            "api_key": {nasa_api},
+            "count": apod_photos_amount
+    }
     response = check_url_accessibility(input_link, payload)
     if response:
         reply = response.json()
         for image_number, picture in enumerate(reply):
             try:
                 nasa_image_url = reply[image_number]['hdurl']
-                nasa_filename = '{}/nasa_apod{}{}'.\
-                                format(
-                                    path, image_number+1,
-                                    file_extension(nasa_image_url)
-                                    )
+                nasa_filename_extension = file_extension(nasa_image_url)
+                nasa_filename = path + '/nasa_apod' + str(image_number+1) +\
+                    nasa_filename_extension
                 download_pictures(nasa_image_url, nasa_filename)
             except KeyError:
                 continue
