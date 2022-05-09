@@ -1,9 +1,8 @@
 import os
-
+import time
 
 import telegram
 from dotenv import load_dotenv
-import time
 
 
 def main():
