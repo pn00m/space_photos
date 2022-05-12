@@ -15,7 +15,7 @@ def main():
     for filenames in os.walk(path):
         for filename in filenames[2]:
             with open(path+'/'+filename, 'rb') as space_photo_file:
-                bot.send_document(channel_id, space_photo_file)
+                bot.send_photo(channel_id, space_photo_file)
                 time.sleep(int(cycle_delay))
             os.remove(path+'/'+filename)
 
