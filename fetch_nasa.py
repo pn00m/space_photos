@@ -47,8 +47,8 @@ def fetch_nasa_epic(path, nasa_api):
                 .format(epic_date.year, epic_date.strftime('%m'),
                         epic_date.strftime('%d'), reply[0]['image'], nasa_api
                         )
-            nasa_filename = '{}/nasa_epic{}.png'.format(path, day + 1)
-            download_pictures(epic_url, nasa_filename)
+            nasa_epic_photo_filepath = '{}/nasa_epic{}.png'.format(path, day + 1)
+            download_pictures(epic_url, nasa_epic_photo_filepath)
 
 
 def fetch_nasa_apod(path, nasa_api):
@@ -64,10 +64,10 @@ def fetch_nasa_apod(path, nasa_api):
         for image_number, picture in enumerate(reply):
             try:
                 nasa_image_url = reply[image_number]['hdurl']
-                nasa_filename_extension = file_extension(nasa_image_url)
-                nasa_filename = path + '/nasa_apod' + str(image_number + 1) +\
-                    nasa_filename_extension
-                download_pictures(nasa_image_url, nasa_filename)
+                nasa_apod_filename_extension = file_extension(nasa_image_url)
+                nasa_apod_photo_filepath = path + '/nasa_apod' + str(image_number + 1) +\
+                    nasa_apod_filename_extension
+                download_pictures(nasa_image_url, nasa_apod_photo_filepath)
             except KeyError:
                 continue
 

@@ -13,8 +13,8 @@ def main():
     spacex_images = response.json()[0]['links']['flickr_images']
     os.makedirs(path, exist_ok=True)
     for image_number, spacex_image_url in enumerate(spacex_images):
-        spacex_filename = '{}/spacex{}.jpg'.format(path, image_number+1)
-        download_pictures(spacex_image_url, spacex_filename)
+        spacex_photo_filepath = '{}/spacex{}.jpg'.format(path, image_number+1)
+        download_pictures(spacex_image_url, spacex_photo_filepath)
 
 
 if __name__ == '__main__':
