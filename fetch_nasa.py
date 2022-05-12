@@ -17,16 +17,10 @@ def file_extension(url):
 
 
 def check_url_accessibility(url, payload):
-    try:
-        response = requests.get(url, params=payload)
-        if (response.status_code in (400, 401, 404)) or\
-                ('error' in response):
-            return None
-    except (
-            requests.exceptions.HTTPError,
-            requests.exceptions.InvalidURL,
-            requests.exceptions.ConnectionError,
-    ):
+    response = requests.get(url, params=payload)
+    response.raise_for_status
+    if (response.status_code in (400, 401, 404)) or\
+            ('error' in response):
         return None
     return response
 
