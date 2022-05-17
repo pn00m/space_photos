@@ -2,6 +2,7 @@ import os
 
 import requests
 
+from define_file_extension import define_file_extension
 from download_pictures import download_pictures
 
 
@@ -15,7 +16,9 @@ def main():
     spacex_images = response.json()[0]['links']['flickr_images']
     os.makedirs(path, exist_ok=True)
     for image_number, spacex_image_url in enumerate(spacex_images):
-        spacex_photo_filepath = '{}/spacex{}.jpg'.format(path, image_number+1)
+        file_extension = define_file_extension(spacex_image_url)
+        spacex_photo_filepath = '{}/spacex{}{}'\
+            .format(path, image_number+1, file_extension)
         download_pictures(spacex_image_url, spacex_photo_filepath)
 
 
