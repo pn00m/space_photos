@@ -1,28 +1,12 @@
 import os
 import datetime
-from os.path import splitext
-from urllib.parse import urlsplit
 
 
 import requests
 from dotenv import load_dotenv
+from check_url_accessibility import check_url_accessibility
+from define_file_extension import define_file_extension
 from download_pictures import download_pictures
-
-
-def file_extension(url):
-    url_path = urlsplit(url).path
-    path_name_extension = splitext(url_path)
-    extension = path_name_extension[1]
-    return extension
-
-
-def check_url_accessibility(url, payload):
-    response = requests.get(url, params=payload)
-    response.raise_for_status
-    if (response.status_code in (400, 401, 404)) or\
-            ('error' in response):
-        return None
-    return response
 
 
 def fetch_nasa_epic(path, nasa_api):
@@ -60,7 +44,7 @@ def fetch_nasa_apod(path, nasa_api):
     for image_number, picture in enumerate(reply):
         try:
             nasa_image_url = reply[image_number]['hdurl']
-            nasa_apod_filename_extension = file_extension(nasa_image_url)
+            nasa_apod_filename_extension = define_file_extension(nasa_image_url)
             nasa_apod_photo_filepath = path + '/nasa_apod' + str(image_number + 1) +\
                 nasa_apod_filename_extension
             download_pictures(nasa_image_url, nasa_apod_photo_filepath)
