@@ -4,7 +4,6 @@ import datetime
 
 import requests
 from dotenv import load_dotenv
-from check_url_accessibility import check_url_accessibility
 from define_file_extension import define_file_extension
 from download_pictures import download_pictures
 
@@ -17,8 +16,9 @@ def fetch_nasa_epic(path, nasa_api):
     input_link = 'https://api.nasa.gov/EPIC/api/natural'
     epic_base_url = 'https://api.nasa.gov/EPIC/archive/natural/'
     for day in range(epic_photos_amount):
-        response = check_url_accessibility(input_link, payload)
-        if not response:
+        response = requests.get(input_link, params=payload)
+        response.raise_for_status
+        if not response.ok:
             continue
         reply = response.json()
         epic_date = datetime.datetime.fromisoformat(reply[day]['date'])
@@ -37,8 +37,8 @@ def fetch_nasa_apod(path, nasa_api):
         "api_key": {nasa_api},
         "count": apod_photos_amount
     }
-    response = check_url_accessibility(input_link, payload)
-    if not response:
+    response = requests.get(input_link, params=payload)
+    if not response.ok:
         return
     reply = response.json()
     for image_number, picture in enumerate(reply):
