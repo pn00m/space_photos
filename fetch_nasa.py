@@ -15,16 +15,16 @@ def fetch_nasa_epic(path, nasa_api):
     epic_photos_amount = 5
     input_link = 'https://api.nasa.gov/EPIC/api/natural'
     epic_base_url = 'https://api.nasa.gov/EPIC/archive/natural/'
+    response = requests.get(input_link, params=payload)
+    response.raise_for_status
+    if not response.ok:
+        return
+    reply = response.json()
     for day in range(epic_photos_amount):
-        response = requests.get(input_link, params=payload)
-        response.raise_for_status
-        if not response.ok:
-            continue
-        reply = response.json()
         epic_date = datetime.datetime.fromisoformat(reply[day]['date'])
         epic_url = epic_base_url + '{}/{}/{}/png/{}.png?api_key={}'\
             .format(epic_date.year, epic_date.strftime('%m'),
-                    epic_date.strftime('%d'), reply[0]['image'], nasa_api
+                    epic_date.strftime('%d'), reply[day]['image'], nasa_api
                     )
         nasa_epic_photo_filepath = '{}/nasa_epic{}.png'.format(path, day + 1)
         download_pictures(epic_url, nasa_epic_photo_filepath)
@@ -44,9 +44,9 @@ def fetch_nasa_apod(path, nasa_api):
     for image_number, picture in enumerate(reply):
         try:
             nasa_image_url = reply[image_number]['hdurl']
-            nasa_apod_filename_extension = define_file_extension(nasa_image_url)
-            nasa_apod_photo_filepath = path + '/nasa_apod' + str(image_number + 1) +\
-                nasa_apod_filename_extension
+            apod_filename_extension = define_file_extension(nasa_image_url)
+            nasa_apod_photo_filepath = path + '/nasa_apod' +\
+                str(image_number + 1) + apod_filename_extension
             download_pictures(nasa_image_url, nasa_apod_photo_filepath)
         except KeyError:
             continue
