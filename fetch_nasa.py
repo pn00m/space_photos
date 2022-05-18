@@ -45,8 +45,9 @@ def fetch_nasa_apod(path, nasa_api):
         try:
             nasa_image_url = reply[image_number]['hdurl']
             apod_filename_extension = define_file_extension(nasa_image_url)
-            nasa_apod_photo_filepath = path + '/nasa_apod' +\
-                str(image_number + 1) + apod_filename_extension
+            nasa_apod_photo_filepath = '{}/nasa_apod{}{}'.format(
+                path, str(image_number + 1), apod_filename_extension
+                )
             download_pictures(nasa_image_url, nasa_apod_photo_filepath)
         except KeyError:
             continue
