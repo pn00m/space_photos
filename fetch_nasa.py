@@ -22,9 +22,9 @@ def fetch_nasa_epic(path, nasa_api):
     reply = response.json()
     for day in range(epic_photos_amount):
         epic_date = datetime.datetime.fromisoformat(reply[day]['date'])
-        epic_url = epic_base_url + '{}/{}/{}/png/{}.png?api_key={}'\
-            .format(epic_date.year, epic_date.strftime('%m'),
-                    epic_date.strftime('%d'), reply[day]['image'], nasa_api
+        epic_url = epic_base_url + '{}/png/{}.png?api_key={}'\
+            .format(epic_date.strftime('%Y/%m/%d'),
+                    reply[day]['image'], nasa_api
                     )
         nasa_epic_photo_filepath = '{}/nasa_epic{}.png'.format(path, day + 1)
         download_pictures(epic_url, nasa_epic_photo_filepath)
@@ -57,7 +57,7 @@ def main():
     path = 'images'
     nasa_api = os.environ['NASA_API_KEY']
     os.makedirs(path, exist_ok=True)
-    fetch_nasa_apod(path, nasa_api)
+    # fetch_nasa_apod(path, nasa_api)
     fetch_nasa_epic(path, nasa_api)
 
 
