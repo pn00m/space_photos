@@ -10,7 +10,7 @@ from download_pictures import download_pictures
 
 def fetch_nasa_epic(path, nasa_api):
     payload = {
-        "api_key": {nasa_api},
+        "api_key": nasa_api,
     }
     epic_photos_amount = 5
     input_link = 'https://api.nasa.gov/EPIC/api/natural'
@@ -34,7 +34,7 @@ def fetch_nasa_apod(path, nasa_api):
     input_link = 'https://api.nasa.gov/planetary/apod'
     apod_photos_amount = 30
     payload = {
-        "api_key": {nasa_api},
+        "api_key": nasa_api,
         "count": apod_photos_amount
     }
     response = requests.get(input_link, params=payload)
@@ -57,7 +57,7 @@ def main():
     path = 'images'
     nasa_api = os.environ['NASA_API_KEY']
     os.makedirs(path, exist_ok=True)
-    # fetch_nasa_apod(path, nasa_api)
+    fetch_nasa_apod(path, nasa_api)
     fetch_nasa_epic(path, nasa_api)
 
 
