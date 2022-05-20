@@ -8,9 +8,8 @@ from download_pictures import *
 def main():
     path = 'images'
     spacex_api_link = 'https://api.spacexdata.com/v3/launches'
-    launch_param = 'flight_number'
     launch_value = '108'
-    payload = {launch_param: launch_value}
+    payload = {'flight_number': launch_value}
     response = requests.get(spacex_api_link, params=payload)
     spacex_images = response.json()[0]['links']['flickr_images']
     os.makedirs(path, exist_ok=True)
