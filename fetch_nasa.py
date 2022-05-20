@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from download_pictures import *
 
 
-def fetch_nasa_epic(path, nasa_api):
+def fetch_nasa_epic_images(path, nasa_api):
     payload = {
         "api_key": nasa_api,
     }
@@ -29,7 +29,7 @@ def fetch_nasa_epic(path, nasa_api):
         download_pictures(epic_url, nasa_epic_photo_filepath)
 
 
-def fetch_nasa_apod(path, nasa_api):
+def fetch_nasa_apod_images(path, nasa_api):
     input_link = 'https://api.nasa.gov/planetary/apod'
     apod_photos_amount = 30
     payload = {
@@ -57,8 +57,8 @@ def main():
     path = 'images'
     nasa_api = os.environ['NASA_API_KEY']
     os.makedirs(path, exist_ok=True)
-    fetch_nasa_apod(path, nasa_api)
-    fetch_nasa_epic(path, nasa_api)
+    fetch_nasa_epic_images(path, nasa_api)
+    fetch_nasa_apod_images(path, nasa_api)
 
 
 if __name__ == '__main__':
