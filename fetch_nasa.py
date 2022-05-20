@@ -16,8 +16,6 @@ def fetch_nasa_epic_images(path, nasa_api_key):
     epic_base_url = 'https://api.nasa.gov/EPIC/archive/natural/'
     response = requests.get(input_link, params=payload)
     response.raise_for_status
-    if not response.ok:
-        return
     reply = response.json()
     for day in range(epic_photos_amount):
         epic_date = datetime.datetime.fromisoformat(reply[day]['date'])
@@ -37,8 +35,6 @@ def fetch_nasa_apod_images(path, nasa_api_key):
         "count": apod_photos_amount
     }
     response = requests.get(input_link, params=payload)
-    if not response.ok:
-        return
     reply = response.json()
     for image_number, picture in enumerate(reply):
         try:
