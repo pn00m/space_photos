@@ -1,11 +1,10 @@
-import os
 import datetime
-
+import os
 
 import requests
 from dotenv import load_dotenv
-from define_file_extension import define_file_extension
-from download_pictures import download_pictures
+
+from download_pictures import *
 
 
 def fetch_nasa_epic(path, nasa_api):

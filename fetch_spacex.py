@@ -2,8 +2,7 @@ import os
 
 import requests
 
-from define_file_extension import define_file_extension
-from download_pictures import download_pictures
+from download_pictures import *
 
 
 def main():
