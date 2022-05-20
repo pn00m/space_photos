@@ -19,8 +19,8 @@ def fetch_nasa_epic_images(path, nasa_api_key):
     reply = response.json()
     for day in range(epic_photos_amount):
         epic_date = datetime.datetime.fromisoformat(reply[day]['date'])
-        epic_url = epic_base_url + '{}/png/{}.png?api_key={}'\
-            .format(epic_date.strftime('%Y/%m/%d'),
+        epic_url = epic_base_url + '{}/png/{}.png?api_key={}'.format(
+                    epic_date.strftime('%Y/%m/%d'),
                     reply[day]['image'], nasa_api_key
                     )
         nasa_epic_photo_filepath = '{}/nasa_epic{}.png'.format(path, day + 1)
