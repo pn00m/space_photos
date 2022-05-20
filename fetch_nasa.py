@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 from download_pictures import *
 
 
-def fetch_nasa_epic_images(path, nasa_api):
+def fetch_nasa_epic_images(path, nasa_api_key):
     payload = {
-        "api_key": nasa_api,
+        "api_key": nasa_api_key,
     }
     epic_photos_amount = 5
     input_link = 'https://api.nasa.gov/EPIC/api/natural'
@@ -23,17 +23,17 @@ def fetch_nasa_epic_images(path, nasa_api):
         epic_date = datetime.datetime.fromisoformat(reply[day]['date'])
         epic_url = epic_base_url + '{}/png/{}.png?api_key={}'\
             .format(epic_date.strftime('%Y/%m/%d'),
-                    reply[day]['image'], nasa_api
+                    reply[day]['image'], nasa_api_key
                     )
         nasa_epic_photo_filepath = '{}/nasa_epic{}.png'.format(path, day + 1)
         download_pictures(epic_url, nasa_epic_photo_filepath)
 
 
-def fetch_nasa_apod_images(path, nasa_api):
+def fetch_nasa_apod_images(path, nasa_api_key):
     input_link = 'https://api.nasa.gov/planetary/apod'
     apod_photos_amount = 30
     payload = {
-        "api_key": nasa_api,
+        "api_key": nasa_api_key,
         "count": apod_photos_amount
     }
     response = requests.get(input_link, params=payload)
@@ -55,10 +55,10 @@ def fetch_nasa_apod_images(path, nasa_api):
 def main():
     load_dotenv()
     path = 'images'
-    nasa_api = os.environ['NASA_API_KEY']
+    nasa_api_key = os.environ['NASA_API_KEY']
     os.makedirs(path, exist_ok=True)
-    fetch_nasa_epic_images(path, nasa_api)
-    fetch_nasa_apod_images(path, nasa_api)
+    fetch_nasa_epic_images(path, nasa_api_key)
+    fetch_nasa_apod_images(path, nasa_api_key)
 
 
 if __name__ == '__main__':
