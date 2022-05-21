@@ -7,7 +7,7 @@ from download_pictures import *
 
 def fetch_images(spacex_images, path):
     for image_number, spacex_image_url in enumerate(spacex_images):
-        file_extension = define_file_extension(spacex_image_url)
+        file_extension = get_file_extension(spacex_image_url)
         spacex_photo_filepath = '{}/spacex{}{}'\
             .format(path, image_number+1, file_extension)
         download_pictures(spacex_image_url, spacex_photo_filepath)
