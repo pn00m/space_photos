@@ -4,7 +4,7 @@ from urllib.parse import urlsplit
 import requests
 
 
-def define_file_extension(url):
+def get_file_extension(url):
     url_path = urlsplit(url).path
     file_path, file_extension = splitext(url_path)
     return file_extension

@@ -39,7 +39,7 @@ def fetch_nasa_apod_images(path, nasa_api_key):
     for image_number, picture in enumerate(reply):
         try:
             nasa_image_url = reply[image_number]['hdurl']
-            apod_filename_extension = define_file_extension(nasa_image_url)
+            apod_filename_extension = get_file_extension(nasa_image_url)
             nasa_apod_photo_filepath = '{}/nasa_apod{}{}'.format(
                 path, str(image_number + 1), apod_filename_extension
                 )
